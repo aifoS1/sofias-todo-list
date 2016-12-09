@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Favorites Organizer powered by Cloudant</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="stylesheet" href="/style/style.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+	<div class = "container">
+	<div class = "banner">
+		<!-- <img class="newappIcon" src="images/newapp-icon.png"> -->
+		<p class = "appTitle">
+			Todo List
+		</p>
+	</div>
+
+	<section class="todo-list-container">
+		<h2>Todo List</h2>
+		<ul class="todo-list-items">
+			<% for (var i = 0; i < todoList.length; i++) { %>
+			<li class="todo-list-item" data-id="<%= todoList[i]['_id'] %>"><p>
+				<%= todoList[i]['todo'] %>: <input type="checkbox" name="complete"> complete </input> <input type="checkbox" name="remove"> remove </input> <br>
+			</p></li>
+			<%  } %>
+		</ul>
+		<input type="text" name="todo"><button id="add-todo">Add todo</button>
+	</section>
+
+		<section class="todo-list-container">
+		<h2>Completed List</h2>
+		<ul class="completed-todo-list-items">
+			<% for (var i = 0; i < completed.length; i++) { %>
+			<li class="todo-list-item" data-id="<%= completed[i]['_id'] %>"><p>
+				<%= completed[i]['todo'] %><br>
+			</p></li>
+			<%  } %>
+		</ul>
+	</section>
+
+		<div id="loadingImage"></div>
+		<br><br><br><br><br>
+		<div id="errorDiv" class='errorMsg'></div>
+	</footer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="/scripts/util.js"></script>
+	<script type="text/javascript" src="/scripts/index.js"></script>
+	<div id="myImage"><div id="innerImg"></div></div>
+	<br><br><br>
+	</div>
+</body>
+</html>
