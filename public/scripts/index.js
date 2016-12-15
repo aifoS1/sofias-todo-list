@@ -17,14 +17,30 @@ $('body').on('click', '#add-todo', function() {
 $('body').on('click', '.todo-list-item input[name=complete]', function() {
    var id = $(this).parents('.todo-list-item').data('id');
    updateTodo(id)
-  
 })
 
 function addToDoToList(todo) {
-  var $li = '<li class=\"todo-list-item\" data-id=\"' + todo._id + '\" ><p>' + todo.todo + ':' + '<input type=\"checkbox\" name=\"complete\">complete </input> <input type=\"checkbox\" name=\"remove\"> </input><br></p></li>'
+  var $li = '<li class=\"todo-list-item\" data-id=\"' + todo._id + '\" ><p>' + todo.todo + ':' + '<input type=\"checkbox\" name=\"complete\">complete </input> <input type=\"checkbox\" name=\"delete\"> delete </input><br></p></li>'
 
   var $ul = $(".todo-list-items")
   $ul.append($li)
+}
+
+function addToCompletedList(todo) {
+ console.log("Added:", todo)
+  var $li = '<li class=\"todo-list-item\" data-id=\"' + todo._id + '\" ><p>' + todo.todo + ':' + '<input type=\"checkbox\" name=\"incomplete\">move back to todo list </input> <input type=\"checkbox\" name=\"delete\"> delete </input><br></p></li>';
+  //remove this todo from the to-do list
+  removeFromTodoList(todo._id)
+   // //add to completed list
+  var $ul = $('.completed-todo-list-items');
+  $ul.append($li);
+}
+
+function removeFromTodoList(todoId){
+  //get todo by data-id and the remove it from html
+  var $todoEl =  $('[data-id=' + '"' + todoId +'"' + ']')
+
+  $todoEl.remove();
 }
 
 function getTodos() {
@@ -44,9 +60,6 @@ function getTodos() {
 
 
 function addTodo(todo) {
-  // xhrPost(REST_DATA, todo, function(req, res) {
-  //   console.log(res)
-  // })
   $.ajax({
       type: 'POST',
       data: JSON.stringify(todo),
@@ -56,6 +69,16 @@ function addTodo(todo) {
           console.log('success');
           console.log(data);
           addToDoToList(data);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        //show status: 404, 502 etc
+        console.log("error status: ", jqXHR.status)
+        //show error thrown such as "NOT FOUND" correlating to a 404
+        console.log("error thrown:", errorThrown);
+        //get response text
+        console.log("an error as occurred:", jqXHR.responseText)
+
+        alert("there was an error procressing your request. The status of the request is" + jqXHR.status + ":" + errorThrown + "with this responseText: " + jqXHR.responseText)
       }
     });
 }
@@ -69,16 +92,27 @@ function deleteTodo() {
 function updateTodo(id) {
   $.ajax({
     type: 'PUT',
-    // data: '" + id + "',
     contentType: 'application/json',
     url: "/todos/" + "" + id + "",            
     success: function(data) {
         console.log('success');
         console.log(JSON.stringify(data));
-      
+        addToCompletedList(data)
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+          //show status: 404, 502 etc
+      console.log("error status: ", jqXHR.status)
+      //show error thrown such as "NOT FOUND" correlating to a 404
+      console.log("error thrown:", errorThrown);
+      //get response text
+      console.log("an error as occurred:", jqXHR.responseText)
+
+      alert("there was an error procressing your request. The status of the request is" + jqXHR.status + ":" + errorThrown + "with this responseText: " + jqXHR.responseText)   
     }
   });
 }
+
+// todo add comments/and erro logs
 
 function init() {
 

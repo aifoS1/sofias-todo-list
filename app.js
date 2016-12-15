@@ -167,30 +167,24 @@ app.post('/', multipartMiddleware, function(req, res) {
 
     var todo = req.body.todo;
     var complete= req.body.complete;
-    console.log('body: ' + JSON.stringify(req.body));
 
     db.insert ({
         _id: "todos",
         todo: todo,
         complete: complete
+    }, function(err, todo) {
+        if (err) {
+          console.log(err);
+          response.sendStatus(500);
+        } else {
+          res.send(todo);
+        }
     });
-    res.send(req.body);
+    
 
 });
 
-app.post('/api/favorites', function(request, response) {
 
-    console.log("Create Invoked..");
-    console.log("Name: " + request.body.name);
-    console.log("Value: " + request.body.value);
-
-    // var id = request.body.id;
-    var name = request.body.name;
-    var value = request.body.value;
-
-    saveDocument(null, name, value, response);
-
-});
 
 app.delete('/api/favorites', function(request, response) {
 

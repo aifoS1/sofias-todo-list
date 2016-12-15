@@ -54,8 +54,20 @@ exports.add = function(req, res){
     db.insert ({
         todo: todo,
         complete: complete
-    });
-    res.send(req.body);
+    }, function(err, body) {
+        if (err) {
+          console.log(err);
+          res.sendStatus(500);
+        }
+        var todoItem = {
+          _id: body.id,
+           todo: todo,
+          complete: complete
+        }
+      res.send(todoItem);
+
+    })
+     
 }
 
 exports.markCompleted =function(req, res) {
@@ -67,7 +79,8 @@ exports.markCompleted =function(req, res) {
  			 todo.complete = true;
 
  			 db.insert( todo, function(err, body) {
- 			 		res.send(body);
+        if (err) { console.log("error occurred: ", err)}
+ 			 		res.send(todo);
  			 })
     });
 }
